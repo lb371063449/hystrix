@@ -2,6 +2,7 @@ package com.roncoo.eshop.product.ha.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @author rinbo
  */
 @RestController
+@Slf4j
 public class ProductController {
 
 	@RequestMapping("/getProductInfo")
 	public String getProductInfo(Long productId) {
-        System.out.println("getProductInfo,and productId = " +productId);
+        log.info("getProductInfo,and productIdsss = {}",productId);
 		return "{\"id\": " + productId + ", \"name\": \"iphone7手机\", \"price\": 5599, \"pictureList\":\"a.jpg,b.jpg\", \"specification\": \"iphone7的规格\", \"service\": \"iphone7的售后服务\", \"color\": \"红色,白色,黑色\", \"size\": \"5.5\", \"shopId\": 1, \"modifiedTime\": \"2017-01-01 12:00:00\", \"cityId\": 1, \"brandId\": 1}";
 	}
 	

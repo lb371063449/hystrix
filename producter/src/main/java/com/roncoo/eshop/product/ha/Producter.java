@@ -1,28 +1,21 @@
-package com.roncoo.eshop.cache.ha;
-
-import javax.sql.DataSource;
+package com.roncoo.eshop.product.ha;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.roncoo.eshop.cache.ha.filter.HystrixRequestContextFilter;
+import javax.sql.DataSource;
 
-@EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan
-@MapperScan("com.roncoo.eshop.cache.ha.mapper")
-public class Application {
+@MapperScan("com.roncoo.eshop.product.ha.mapper")
+public class Producter {
  
     @Bean
     @ConfigurationProperties(prefix="spring.datasource")
@@ -43,17 +36,9 @@ public class Application {
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
-    
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-    	FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(
-    			new HystrixRequestContextFilter());
-    	filterRegistrationBean.addUrlPatterns("/*");
-    	return filterRegistrationBean;
-    }
-    
+
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Producter.class, args);
     }
     
 }

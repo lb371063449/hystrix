@@ -1,11 +1,13 @@
-package com.roncoo.eshop.product.ha;
+package com.roncoo.eshop.cache.ha;
 
+import com.roncoo.eshop.cache.ha.filter.HystrixRequestContextFilter;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -14,8 +16,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-@MapperScan("com.roncoo.eshop.product.ha.mapper")
-public class Application {
+@MapperScan("com.roncoo.eshop.cache.ha.mapper")
+public class Consumer {
  
     @Bean
     @ConfigurationProperties(prefix="spring.datasource")
@@ -36,9 +38,17 @@ public class Application {
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
+    
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(
+    			new HystrixRequestContextFilter());
+    	filterRegistrationBean.addUrlPatterns("/*");
+    	return filterRegistrationBean;
+    }
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Consumer.class, args);
     }
     
 }

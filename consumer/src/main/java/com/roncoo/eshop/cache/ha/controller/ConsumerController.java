@@ -1,13 +1,5 @@
 package com.roncoo.eshop.cache.ha.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.netflix.hystrix.HystrixCommand;
 import com.roncoo.eshop.cache.ha.degrade.IsDegrade;
 import com.roncoo.eshop.cache.ha.http.HttpClientUtils;
@@ -16,26 +8,26 @@ import com.roncoo.eshop.cache.ha.hystrix.command.GetCityNameCommand;
 import com.roncoo.eshop.cache.ha.hystrix.command.GetProductInfoCommand;
 import com.roncoo.eshop.cache.ha.hystrix.command.GetProductInfosCollapser;
 import com.roncoo.eshop.cache.ha.model.ProductInfo;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 
 /**
- * 缓存服务的接口
- * @author Administrator
- *
+ * 服务消费controller
+ * @author rinbo
  */
-@Controller
-public class CacheController {
+@RestController
+public class ConsumerController {
 
-	@RequestMapping("/change/product")
-	@ResponseBody
+	@RequestMapping("/httpproduct")
 	public String changeProduct(Long productId) {
-		// 拿到一个商品id
-		// 调用商品服务的接口，获取商品id对应的商品的最新数据
-		// 用HttpClient去调用商品服务的http接口
 		String url = "http://127.0.0.1:8082/getProductInfo?productId=" + productId;
 		String response = HttpClientUtils.sendGetRequest(url);
-		System.out.println(response);  
-		
-		return "success";
+		return response;
 	}
 	
 	/**
@@ -44,7 +36,6 @@ public class CacheController {
 	 * @return
 	 */
 	@RequestMapping("/getProductInfo")
-	@ResponseBody
 	public ProductInfo getProductInfo(Long productId) {
 		// 拿到一个商品id
 		// 调用商品服务的接口，获取商品id对应的商品的最新数据
@@ -79,7 +70,6 @@ public class CacheController {
 	 * 一次性批量查询多条商品数据的请求
 	 */
 	@RequestMapping("/getProductInfos")
-	@ResponseBody
 	public String getProductInfos(String productIds) {
 //		HystrixObservableCommand<ProductInfo> getProductInfosCommand = 
 //				new GetProductInfosCommand(productIds.split(","));  
@@ -131,7 +121,6 @@ public class CacheController {
 	}
 	
 	@RequestMapping("/isDegrade")
-	@ResponseBody
 	public String isDegrade(boolean degrade) {
 		IsDegrade.setDegrade(degrade); 
 		return "success";
